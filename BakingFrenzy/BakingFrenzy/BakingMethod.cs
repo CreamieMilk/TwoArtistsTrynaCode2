@@ -12,46 +12,26 @@ namespace CookingSimulator
         public int FinalLevelScore { get; protected set; } = 0; 
 
         protected int currentStep = 0;
-        protected int previousStepMemory = 0; 
-        
-        public float stepTimer { get; protected set; } = 10f; 
-        protected int totalFailures = 0; 
-
         protected float currentSwipeDistance = 0f;
         protected float cookingProgress = 0f;
         protected bool progressIncreasing = true;
 
-        protected Vector2 centerStage;
-        protected Vector2 corner1;
-        protected Vector2 corner2;
-        protected Vector2 corner3;
-        protected Vector2 corner4;
+        protected Vector2 centerStage, hintLocation, corner1, corner2, corner3, corner4;
+        
+        protected Texture2D bgTable, bgStove, bgOven, emptyBowl, pot, pan;
+        protected Texture2D water, sugar, salt, egg, milk, flour;
+        protected Texture2D hintPressE, hintSwipeHoriz, hintSwipeVert, hintClick, hintSpacebar;
+        protected Texture2D uiBarBackground, uiMeterNeedle, popupAmazing, popupGood, popupMiss;
 
-        protected Texture2D bgTable;
-        protected Texture2D bgStove;
-        protected Texture2D bgOven;
-
-        protected Texture2D emptyBowl;
-        protected Texture2D pot;
-        protected Texture2D pan;
-
-        protected Texture2D water;
-        protected Texture2D sugar;
-        protected Texture2D salt;
-        protected Texture2D egg;
-        protected Texture2D milk;
-        protected Texture2D flour;
-
-        protected Texture2D hintPressE;
-        protected Texture2D hintSwipeHoriz;
-        protected Texture2D hintSwipeVert;
-        protected Texture2D hintClick;
-        protected Texture2D hintSpacebar;
-        protected Texture2D uiBarBackground;
-        protected Texture2D uiMeterNeedle;
-        protected Texture2D popupAmazing;
-        protected Texture2D popupGood;
-        protected Texture2D popupMiss;
+        public BakingMethods()
+        {
+            centerStage = new Vector2(300, 380);
+            hintLocation = new Vector2(550, 270); 
+            corner1 = new Vector2(100, 250);
+            corner2 = new Vector2(100, 400);
+            corner3 = new Vector2(500, 250);
+            corner4 = new Vector2(500, 400);
+        }
 
         public virtual void LoadBaseContent(ContentManager Content)
         {
@@ -79,103 +59,54 @@ namespace CookingSimulator
             popupMiss = Content.Load<Texture2D>("popupMiss");
         }
 
-        protected void GameTimer(float deltaTime)
+        protected void DrawItem(SpriteBatch sb, Texture2D tex, Vector2 pos, float scale = 0.15f)
         {
-            if (currentStep != previousStepMemory)
+            if (tex != null)
             {
-                stepTimer = 10f;
-                cookingProgress = 0f;
-                currentSwipeDistance = 0f;
-                previousStepMemory = currentStep;
-            }
-
-            stepTimer -= deltaTime;
-
-            if (stepTimer <= 0f)
-            {
-                totalFailures++;
-                currentStep++; 
+                sb.Draw(tex, pos, null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
             }
         }
 
-        protected int TimerMechanic(KeyboardState currentKey, KeyboardState previousKey, Keys requiredKey, float deltaTime)
+        protected void DrawItemPie(SpriteBatch sb, Texture2D tex, Vector2 pos, float scale = 1.2f)
         {
-            float speed = 100f; 
-            if (progressIncreasing)
+            if (tex != null)
             {
-                cookingProgress += speed * deltaTime;
-                if (cookingProgress >= 100f) progressIncreasing = false;
+                sb.Draw(tex, pos, null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
             }
-            else
-            {
-                cookingProgress -= speed * deltaTime;
-                if (cookingProgress <= 0f) progressIncreasing = true;
-            }
-
-            if (currentKey.IsKeyDown(requiredKey) && previousKey.IsKeyUp(requiredKey))
-            {
-                if (cookingProgress >= 40f && cookingProgress <= 60f) return 1; 
-                else return 2; 
-            }
-            return 0;
         }
 
-        protected void CalculateFinalGrade(int miniGameResult)
+        protected void DrawHint(SpriteBatch sb, Texture2D tex, Vector2 pos, float scale = 0.05f)
         {
-            if (miniGameResult == 1 && totalFailures == 0) FinalLevelScore = 1;      
-            else if (miniGameResult == 2 || totalFailures > 3) FinalLevelScore = 3;  
-            else FinalLevelScore = 2;                                                
-        }
-
-        protected bool CheckIfKeyPressed(KeyboardState currentKey, Keys requiredKey)
-        {
-            if (currentKey.IsKeyDown(requiredKey))
+            if (tex != null)
             {
-                cookingProgress = 100f;
-                return true;
+                sb.Draw(tex, pos, null, Color.White, 0f, Vector2.Zero, scale, SpriteEffects.None, 0f);
             }
-            return false; 
         }
 
-        protected bool CheckMouseMovement(MouseState currentMouse, MouseState previousMouse, bool isVertical, float requiredDistance)
+        protected void DrawTimerBar(SpriteBatch sb, Vector2 pos)
         {
-            if (currentMouse.LeftButton == ButtonState.Pressed)
+            if (uiBarBackground != null)
             {
-                if (isVertical) currentSwipeDistance += System.Math.Abs(currentMouse.Y - previousMouse.Y);
-                else currentSwipeDistance += System.Math.Abs(currentMouse.X - previousMouse.X);
-
-                cookingProgress = (currentSwipeDistance / requiredDistance) * 100f;
-
-                if (currentSwipeDistance >= requiredDistance)
-                {
-                    currentSwipeDistance = 0f;
-                    return true; 
-                }
+                sb.Draw(uiBarBackground, new Rectangle((int)pos.X, (int)pos.Y, 200, 20), Color.White);
             }
-            return false;
         }
-        
-        protected bool CheckMouseClick(MouseState currentMouse, MouseState previousMouse)
+
+        protected void DrawScaledBackground(SpriteBatch sb, Texture2D tex)
         {
-            if (currentMouse.LeftButton == ButtonState.Pressed && previousMouse.LeftButton == ButtonState.Released)
+            if (tex != null)
             {
-                cookingProgress = 100f;
-                return true;
+                sb.Draw(tex, new Rectangle(0, 0, 900, 650), Color.White);
             }
-            return false;
         }
 
-        protected bool AddIngredients(KeyboardState currentKey, MouseState currentMouse, MouseState previousMouse) 
-        { return CheckIfKeyPressed(currentKey, Keys.E); }
+        protected bool CheckIfKeyPressed(KeyboardState currentKey, KeyboardState previousKey, Keys requiredKey) 
+        { return (currentKey.IsKeyDown(requiredKey) && previousKey.IsKeyUp(requiredKey)); }
 
-        protected bool CrackEggs(KeyboardState currentKey) 
-        { return CheckIfKeyPressed(currentKey, Keys.A); }
+        protected bool AddIngredients(KeyboardState currentKey, KeyboardState previousKey, Keys key) 
+        { return CheckIfKeyPressed(currentKey, previousKey, key); }
 
         protected bool Mix(MouseState currentMouse, MouseState previousMouse) 
         { return CheckMouseMovement(currentMouse, previousMouse, false, 1000f); }
-
-        protected bool Knead(KeyboardState currentKey) 
-        { return CheckIfKeyPressed(currentKey, Keys.E); }
 
         protected bool Wrap(MouseState currentMouse, MouseState previousMouse) 
         { return CheckMouseMovement(currentMouse, previousMouse, false, 1200f); }
@@ -183,38 +114,45 @@ namespace CookingSimulator
         protected bool Cut(MouseState currentMouse, MouseState previousMouse) 
         { return CheckMouseMovement(currentMouse, previousMouse, true, 500f); }
 
-        protected int Boil(KeyboardState currentKey, KeyboardState previousKey, float deltaTime) 
-        { return TimerMechanic(currentKey, previousKey, Keys.Space, deltaTime); }
-
-        protected bool Drain(MouseState currentMouse, MouseState previousMouse) 
-        { return CheckMouseClick(currentMouse, previousMouse); }
-
         protected bool Rolling(MouseState currentMouse, MouseState previousMouse) 
         { return CheckMouseMovement(currentMouse, previousMouse, true, 1500f); }
-
-        protected bool Pressing(KeyboardState currentKey) 
-        { return CheckIfKeyPressed(currentKey, Keys.E); }
-
-        protected int Frying(KeyboardState currentKey, KeyboardState previousKey, float deltaTime) 
-        { return TimerMechanic(currentKey, previousKey, Keys.Space, deltaTime); }
-
-        protected int Blending(KeyboardState currentKey, KeyboardState previousKey, float deltaTime) 
-        { return TimerMechanic(currentKey, previousKey, Keys.Space, deltaTime); }
 
         protected bool Spreading(MouseState currentMouse, MouseState previousMouse) 
         { return CheckMouseMovement(currentMouse, previousMouse, false, 800f); }
 
-        protected bool Grating(MouseState currentMouse, MouseState previousMouse) 
-        { return CheckMouseMovement(currentMouse, previousMouse, true, 800f); }
+        protected bool Boil(KeyboardState currentKey, KeyboardState previousKey, float deltaTime) 
+        { return (currentKey.IsKeyDown(Keys.Space) && previousKey.IsKeyUp(Keys.Space)); }
 
-        protected bool MakingHoles(MouseState currentMouse, MouseState previousMouse) 
-        { return CheckMouseClick(currentMouse, previousMouse); }
+        protected int Frying(KeyboardState currentKey, KeyboardState previousKey, float deltaTime) 
+        { return Bake(currentKey, previousKey, deltaTime); }
 
-        protected bool Stuffing(KeyboardState currentKey) 
-        { return CheckIfKeyPressed(currentKey, Keys.E); }
-    
         protected int Bake(KeyboardState currentKey, KeyboardState previousKey, float deltaTime) 
-        { return TimerMechanic(currentKey, previousKey, Keys.Space, deltaTime); }
+        { 
+            float speed = 150f;
+            if (progressIncreasing) { cookingProgress += speed * deltaTime; if (cookingProgress >= 100f) progressIncreasing = false; }
+            else { cookingProgress -= speed * deltaTime; if (cookingProgress <= 0f) progressIncreasing = true; }
+            if (currentKey.IsKeyDown(Keys.Space) && previousKey.IsKeyUp(Keys.Space))
+            {
+                if (cookingProgress >= 40f && cookingProgress <= 60f) return 1; 
+                else return 2; 
+            }
+            return 0;
+        }
+
+        protected bool CheckMouseMovement(MouseState currentMouse, MouseState previousMouse, bool isVertical, float requiredDistance)
+        {
+            if (currentMouse.LeftButton == ButtonState.Pressed)
+            {
+                float dist = isVertical ? System.Math.Abs(currentMouse.Y - previousMouse.Y) : System.Math.Abs(currentMouse.X - previousMouse.X);
+                currentSwipeDistance += dist;
+                cookingProgress = (currentSwipeDistance / requiredDistance) * 100f;
+                if (currentSwipeDistance >= requiredDistance) { currentSwipeDistance = 0f; return true; }
+            }
+            return false;
+        }
+
+        protected bool CheckMouseClick(MouseState currentMouse, MouseState previousMouse)
+        { return (currentMouse.LeftButton == ButtonState.Pressed && previousMouse.LeftButton == ButtonState.Released); }
 
         public abstract void Update(GameTime gameTime);
         public abstract void Draw(SpriteBatch spriteBatch);

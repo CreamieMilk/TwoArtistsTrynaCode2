@@ -7,9 +7,6 @@ namespace CookingSimulator
 {
     public class Pizza : BakingMethods 
     {
-        private Vector2 centerBowl;
-        private Vector2 ovenLocation;
-        
         private Texture2D yeast, yeastMixture;
         private Texture2D oliveOil, rawDoughBall;
         private Texture2D doughCut, doughInPan;
@@ -17,23 +14,14 @@ namespace CookingSimulator
         private Texture2D rolledDough, sauceSpread, cheese, pepperoni;
         private Texture2D wrap1, wrap2, wrap3;
         private Texture2D oven, pizzaCooked, pizzapot;
-
+        private Texture2D bowl_WaterSugar, bowl_WaterSugarYeast;
+        private Texture2D bowl_Flour, bowl_FlourSalt, bowl_FlourSaltOil, bowl_DoughUnmixed;
+        private Texture2D pan_Oil, pizzaWithSauce, pizzaWithCheese, pizzaUncooked;
+        private Texture2D bowl_Water;
+        private Texture2D bowl_TomatoPasteMint, bowl_TomatoPasteMintSalt;
         private MouseState previousMouse;
         private KeyboardState previousKey;
         private int finalScore = 0; 
-
-        public Pizza()
-        {
-            Name = "Pizza";
-            
-            centerBowl = new Vector2(400, 300);
-            ovenLocation = new Vector2(200, 100);
-            
-            corner1 = new Vector2(50, 50);
-            corner2 = new Vector2(50, 150);
-            corner3 = new Vector2(50, 250);
-            corner4 = new Vector2(50, 350);
-        }
 
         public void LoadContent(ContentManager Content)
         {
@@ -56,6 +44,19 @@ namespace CookingSimulator
             oven = Content.Load<Texture2D>("oven_PizzaUncooked");
             pizzapot = Content.Load<Texture2D>("pizzaPot");
             pizzaCooked = Content.Load<Texture2D>("pizzaCooked");
+            bowl_WaterSugar = Content.Load<Texture2D>("bowl_WaterSugar");
+            bowl_WaterSugarYeast = Content.Load<Texture2D>("bowl_WaterSugarYeast");
+            bowl_Flour = Content.Load<Texture2D>("bowl_Flour");
+            bowl_FlourSalt = Content.Load<Texture2D>("bowl_FlourSalt");
+            bowl_FlourSaltOil = Content.Load<Texture2D>("bowl_FlourSaltOil");
+            bowl_DoughUnmixed = Content.Load<Texture2D>("bowl_DoughUnmixed");
+            bowl_Water = Content.Load<Texture2D>("bowl_Water");
+            bowl_TomatoPasteMint = Content.Load<Texture2D>("bowl_TomatoPasteMint");
+            bowl_TomatoPasteMintSalt = Content.Load<Texture2D>("bowl_TomatoPasteMintSalt");
+            pan_Oil = Content.Load<Texture2D>("pan_Oil");
+            pizzaWithSauce = Content.Load<Texture2D>("pizzaWithSauce");
+            pizzaWithCheese = Content.Load<Texture2D>("pizzaWithCheese");
+            pizzaUncooked = Content.Load<Texture2D>("pizzaUncooked");
         }
 
         public override void Update(GameTime gameTime)
@@ -67,116 +68,99 @@ namespace CookingSimulator
             switch (currentStep)
             {
                 case 0:
-                    if (AddIngredients(currentKey, currentMouse, previousMouse)) currentStep++;
+                    if (AddIngredients(currentKey, previousKey, Keys.E)) currentStep++;
                     break;
                 case 1:
-                    if (AddIngredients(currentKey, currentMouse, previousMouse)) currentStep++;
+                    if (AddIngredients(currentKey, previousKey, Keys.E)) currentStep++;
                     break;
                 case 2:
-                    if (AddIngredients(currentKey, currentMouse, previousMouse)) currentStep++;
+                    if (AddIngredients(currentKey, previousKey, Keys.E)) currentStep++;
                     break;
                 case 3:
                     if (Mix(currentMouse, previousMouse)) currentStep++;
                     break;
-                case 4: 
-                    if (CheckMouseClick(currentMouse, previousMouse)) currentStep++; 
+                case 4:
+                    if (CheckMouseClick(currentMouse, previousMouse)) currentStep++;
                     break;
                 case 5:
-                    if (AddIngredients(currentKey, currentMouse, previousMouse)) currentStep++;
+                    if (AddIngredients(currentKey, previousKey, Keys.E)) currentStep++;
                     break;
                 case 6:
-                    if (AddIngredients(currentKey, currentMouse, previousMouse)) currentStep++;
+                    if (AddIngredients(currentKey, previousKey, Keys.E)) currentStep++;
                     break;
                 case 7:
-                    if (AddIngredients(currentKey, currentMouse, previousMouse)) currentStep++;
+                    if (AddIngredients(currentKey, previousKey, Keys.E)) currentStep++;
                     break;
                 case 8:
-                    if (AddIngredients(currentKey, currentMouse, previousMouse)) currentStep++;
+                    if (AddIngredients(currentKey, previousKey, Keys.E)) currentStep++;
                     break;
                 case 9:
                     if (Mix(currentMouse, previousMouse)) currentStep++;
                     break;
                 case 10:
-                    if (Wrap(currentMouse, previousMouse)) currentStep++;
+                    if (currentKey.IsKeyDown(Keys.E) && previousKey.IsKeyUp(Keys.E)) currentStep++;
                     break;
-                case 11: 
+                case 11:
                     if (CheckMouseClick(currentMouse, previousMouse)) currentStep++;
                     break;
-                case 12: 
-                    if (CheckMouseClick(currentMouse, previousMouse)) currentStep++;
-                    break;
-                case 13: 
+                case 12:
                     if (Cut(currentMouse, previousMouse)) currentStep++;
                     break;
-                case 14: 
-                    if (AddIngredients(currentKey, currentMouse, previousMouse)) currentStep++;
+                case 13:
+                    if (currentKey.IsKeyDown(Keys.E) && previousKey.IsKeyUp(Keys.E)) currentStep++;
                     break;
-                case 15: 
-                    if (AddIngredients(currentKey, currentMouse, previousMouse)) currentStep++;
-                    break;
-                case 16: 
-                    if (Pressing(currentKey)) currentStep++;
-                    break;
-                case 17: 
+                case 14:
                     if (CheckMouseClick(currentMouse, previousMouse)) currentStep++;
                     break;
-                case 18:  
-                    if (AddIngredients(currentKey, currentMouse, previousMouse)) currentStep++;
+                case 15:
+                    if (AddIngredients(currentKey, previousKey, Keys.E)) currentStep++;
                     break;
-                case 19: 
-                    if (AddIngredients(currentKey, currentMouse, previousMouse)) currentStep++;
+                case 16:
+                    if (AddIngredients(currentKey, previousKey, Keys.E)) currentStep++;
                     break;
-                case 20: 
-                    if (AddIngredients(currentKey, currentMouse, previousMouse)) currentStep++;
+                case 17:
+                    if (CheckMouseClick(currentMouse, previousMouse)) currentStep++;
                     break;
-                case 21: 
+                case 18:
+                    if (AddIngredients(currentKey, previousKey, Keys.E)) currentStep++;
+                    break;
+                case 19:
+                    if (AddIngredients(currentKey, previousKey, Keys.E)) currentStep++;
+                    break;
+                case 20:
+                    if (AddIngredients(currentKey, previousKey, Keys.E)) currentStep++;
+                    break;
+                case 21:
                     if (Mix(currentMouse, previousMouse)) currentStep++;
                     break;
-                case 22: 
+                case 22:
                     if (CheckMouseClick(currentMouse, previousMouse)) currentStep++;
                     break;
-                case 23: 
-                    if (AddIngredients(currentKey, currentMouse, previousMouse)) currentStep++;
-                    break;
-                case 24: 
-                    if (Rolling(currentMouse, previousMouse)) currentStep++;
-                    break;
-                case 25: 
+                case 23:
                     if (CheckMouseClick(currentMouse, previousMouse)) currentStep++;
                     break;
-                case 26: 
-                    if (Spreading(currentMouse, previousMouse)) currentStep++;
+                case 24:
+                    if (AddIngredients(currentKey, previousKey, Keys.E)) currentStep++;
                     break;
-                case 27: 
-                    if (AddIngredients(currentKey, currentMouse, previousMouse)) currentStep++;
+                case 25:
+                    if (AddIngredients(currentKey, previousKey, Keys.E)) currentStep++;
                     break;
-                case 28: 
-                    if (AddIngredients(currentKey, currentMouse, previousMouse)) currentStep++;
+                case 26:
+                    if (AddIngredients(currentKey, previousKey, Keys.E)) currentStep++;
                     break;
-                case 29: 
-                    if (CheckMouseClick(currentMouse, previousMouse)) currentStep++;
+                case 27:
+                    if (currentKey.IsKeyDown(Keys.E) && previousKey.IsKeyUp(Keys.E)) currentStep++;
                     break;
-                case 30: 
+                case 28:
                     int bakeResult = Bake(currentKey, previousKey, deltaTime);
-                    
-                    if (bakeResult == 1) 
+                    if (bakeResult != 0)
                     {
-                        finalScore = 1; 
-                        currentStep++;
-                    }
-                    else if (bakeResult == 2)
-                    {
-                        finalScore = 2; 
+                        finalScore = (bakeResult == 1) ? 1 : 2;
                         currentStep++;
                     }
                     break;
-                case 31: 
-                    if (CheckMouseClick(currentMouse, previousMouse)) 
-                    {
-                        FinalLevelScore = finalScore; 
-                        IsLevelComplete = true; 
-                        currentStep++; 
-                    }
+                case 29:
+                    IsLevelComplete = true;
                     break;
             }
 
@@ -186,214 +170,159 @@ namespace CookingSimulator
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            DrawScaledBackground(spriteBatch, (currentStep >= 28) ? bgOven : bgTable);
+
             switch (currentStep)
             {
-                case 0: 
-                    spriteBatch.Draw(water, corner1, Color.White); 
-                    spriteBatch.Draw(sugar, corner2, Color.White); 
-                    spriteBatch.Draw(yeast, corner3, Color.White); 
-                    spriteBatch.Draw(hintPressE, centerBowl, Color.White);
+                case 0:
+                    DrawItem(spriteBatch, emptyBowl, centerStage);
+                    DrawItem(spriteBatch, water, corner1);
+                    DrawItem(spriteBatch, sugar, corner2);
+                    DrawItem(spriteBatch, yeast, corner3);
+                    DrawHint(spriteBatch, hintPressE, hintLocation);
                     break;
-                case 1: 
-                    spriteBatch.Draw(water, centerBowl, Color.White); 
-                    spriteBatch.Draw(sugar, corner2, Color.White); 
-                    spriteBatch.Draw(yeast, corner3, Color.White); 
-                    spriteBatch.Draw(hintPressE, centerBowl, Color.White);
+                case 1:
+                    DrawItem(spriteBatch, bowl_Water, centerStage);
+                    DrawItem(spriteBatch, sugar, corner2);
+                    DrawItem(spriteBatch, yeast, corner3);
+                    DrawHint(spriteBatch, hintPressE, hintLocation);
                     break;
-                case 2: 
-                    spriteBatch.Draw(water, centerBowl, Color.White); 
-                    spriteBatch.Draw(sugar, centerBowl, Color.White); 
-                    spriteBatch.Draw(yeast, corner3, Color.White); 
-                    spriteBatch.Draw(hintPressE, centerBowl, Color.White);
+                case 2:
+                    DrawItem(spriteBatch, bowl_WaterSugar, centerStage);
+                    DrawItem(spriteBatch, yeast, corner3);
+                    DrawHint(spriteBatch, hintPressE, hintLocation);
                     break;
-                case 3: 
-                    spriteBatch.Draw(water, centerBowl, Color.White);
-                    spriteBatch.Draw(sugar, centerBowl, Color.White);
-                    spriteBatch.Draw(yeast, centerBowl, Color.White); 
-                    spriteBatch.Draw(hintSwipeHoriz, centerBowl, Color.White);
+                case 3:
+                    DrawItem(spriteBatch, bowl_WaterSugarYeast, centerStage);
+                    DrawHint(spriteBatch, hintSwipeHoriz, hintLocation);
                     break;
-                case 4: 
-                    spriteBatch.Draw(yeastMixture, centerBowl, Color.White);
-                    spriteBatch.Draw(popupAmazing, centerBowl, Color.White);
+                case 4:
+                    DrawItem(spriteBatch, yeastMixture, centerStage);
+                    DrawHint(spriteBatch, hintClick, hintLocation);
                     break;
-                case 5: 
-                    spriteBatch.Draw(flour, corner1, Color.White);
-                    spriteBatch.Draw(salt, corner2, Color.White);
-                    spriteBatch.Draw(oliveOil, corner3, Color.White);
-                    spriteBatch.Draw(yeastMixture, corner4, Color.White);
-                    spriteBatch.Draw(hintPressE, centerBowl, Color.White);
+                case 5:
+                    DrawItem(spriteBatch, emptyBowl, centerStage);
+                    DrawItem(spriteBatch, flour, corner1);
+                    DrawItem(spriteBatch, salt, corner2);
+                    DrawItem(spriteBatch, oliveOil, corner3);
+                    DrawItem(spriteBatch, yeastMixture, corner4);
+                    DrawHint(spriteBatch, hintPressE, hintLocation);
                     break;
-                case 6: 
-                    spriteBatch.Draw(flour, centerBowl, Color.White);
-                    spriteBatch.Draw(salt, corner2, Color.White);
-                    spriteBatch.Draw(oliveOil, corner3, Color.White);
-                    spriteBatch.Draw(yeastMixture, corner4, Color.White);
-                    spriteBatch.Draw(hintPressE, centerBowl, Color.White);
+                case 6:
+                    DrawItem(spriteBatch, bowl_Flour, centerStage);
+                    DrawItem(spriteBatch, salt, corner2);
+                    DrawItem(spriteBatch, oliveOil, corner3);
+                    DrawItem(spriteBatch, yeastMixture, corner4);
+                    DrawHint(spriteBatch, hintPressE, hintLocation);
                     break;
-                case 7: 
-                    spriteBatch.Draw(flour, centerBowl, Color.White);
-                    spriteBatch.Draw(salt, centerBowl, Color.White);
-                    spriteBatch.Draw(oliveOil, corner3, Color.White);
-                    spriteBatch.Draw(yeastMixture, corner4, Color.White);
-                    spriteBatch.Draw(hintPressE, centerBowl, Color.White);
+                case 7:
+                    DrawItem(spriteBatch, bowl_FlourSalt, centerStage);
+                    DrawItem(spriteBatch, oliveOil, corner3);
+                    DrawItem(spriteBatch, yeastMixture, corner4);
+                    DrawHint(spriteBatch, hintPressE, hintLocation);
                     break;
-                case 8: 
-                    spriteBatch.Draw(flour, centerBowl, Color.White);
-                    spriteBatch.Draw(salt, centerBowl, Color.White);
-                    spriteBatch.Draw(oliveOil, centerBowl, Color.White);
-                    spriteBatch.Draw(yeastMixture, corner4, Color.White);
-                    spriteBatch.Draw(hintPressE, centerBowl, Color.White);
+                case 8:
+                    DrawItem(spriteBatch, bowl_FlourSaltOil, centerStage);
+                    DrawItem(spriteBatch, yeastMixture, corner4);
+                    DrawHint(spriteBatch, hintPressE, hintLocation);
                     break;
-                case 9: 
-                    spriteBatch.Draw(flour, centerBowl, Color.White);
-                    spriteBatch.Draw(salt, centerBowl, Color.White);
-                    spriteBatch.Draw(oliveOil, centerBowl, Color.White);
-                    spriteBatch.Draw(yeastMixture, centerBowl, Color.White);
-                    spriteBatch.Draw(hintSwipeHoriz, centerBowl, Color.White);
+                case 9:
+                    DrawItem(spriteBatch, bowl_DoughUnmixed, centerStage);
+                    DrawHint(spriteBatch, hintSwipeHoriz, hintLocation);
                     break;
-                case 10: 
-                    spriteBatch.Draw(rawDoughBall, centerBowl, Color.White);
-                    if (currentSwipeDistance < 400f) 
-                        spriteBatch.Draw(hintSwipeHoriz, centerBowl, Color.White);
-                    else if (currentSwipeDistance >= 400f && currentSwipeDistance < 800f) 
-                        spriteBatch.Draw(wrap1, centerBowl, Color.White);
-                    else if (currentSwipeDistance >= 800f) 
-                        spriteBatch.Draw(wrap2, centerBowl, Color.White);
+                case 10:
+                    DrawItem(spriteBatch, rawDoughBall, centerStage);
+                    DrawHint(spriteBatch, hintPressE, hintLocation);
                     break;
-                case 11: 
-                    spriteBatch.Draw(rawDoughBall, centerBowl, Color.White);
-                    spriteBatch.Draw(wrap3, centerBowl, Color.White); 
-                    spriteBatch.Draw(popupGood, centerBowl, Color.White);
+                case 11:
+                    DrawItem(spriteBatch, wrap3, centerStage);
+                    DrawHint(spriteBatch, hintClick, hintLocation);
                     break;
-                case 12: 
-                    spriteBatch.Draw(rawDoughBall, centerBowl, Color.White);
-                    spriteBatch.Draw(wrap3, centerBowl, Color.White);
-                    spriteBatch.Draw(hintClick, centerBowl, Color.White); 
+                case 12:
+                    DrawItem(spriteBatch, rawDoughBall, centerStage);
+                    DrawHint(spriteBatch, hintSwipeHoriz, hintLocation);
                     break;
-                case 13: 
-                    spriteBatch.Draw(rawDoughBall, centerBowl, Color.White);
-                    spriteBatch.Draw(hintSwipeVert, centerBowl, Color.White); 
+                case 13:
+                    DrawItem(spriteBatch, doughCut, centerStage);
+                    DrawHint(spriteBatch, hintPressE, hintLocation);
                     break;
-                case 14: 
-                    spriteBatch.Draw(pizzapot, centerBowl, Color.White);
-                    spriteBatch.Draw(oliveOil, corner1, Color.White);
-                    spriteBatch.Draw(doughCut, corner2, Color.White);
-                    spriteBatch.Draw(hintPressE, centerBowl, Color.White);
+                case 14:
+                    DrawItem(spriteBatch, wrap3, centerStage);
+                    DrawHint(spriteBatch, hintClick, hintLocation);
                     break;
-                case 15: 
-                    spriteBatch.Draw(pizzapot, centerBowl, Color.White);
-                    spriteBatch.Draw(oliveOil, centerBowl, Color.White); 
-                    spriteBatch.Draw(doughCut, corner2, Color.White); 
-                    spriteBatch.Draw(hintPressE, centerBowl, Color.White);
+                case 15:
+                    DrawItem(spriteBatch, pizzapot, centerStage);
+                    DrawItem(spriteBatch, oliveOil, corner1);
+                    DrawItem(spriteBatch, doughCut, corner2);
+                    DrawHint(spriteBatch, hintPressE, hintLocation);
                     break;
-                case 16: 
-                    spriteBatch.Draw(pizzapot, centerBowl, Color.White);
-                    spriteBatch.Draw(doughInPan, centerBowl, Color.White); 
-                    spriteBatch.Draw(hintPressE, centerBowl, Color.White); 
+                case 16:
+                    DrawItem(spriteBatch, pan_Oil, centerStage);
+                    DrawItem(spriteBatch, doughCut, corner2);
+                    DrawHint(spriteBatch, hintPressE, hintLocation);
                     break;
-                case 17: 
-                    spriteBatch.Draw(pizzapot, centerBowl, Color.White);
-                    spriteBatch.Draw(doughInPan, centerBowl, Color.White);
-                    spriteBatch.Draw(wrap3, centerBowl, Color.White); 
-                    spriteBatch.Draw(popupGood, centerBowl, Color.White);
+                case 17:
+                    DrawItem(spriteBatch, doughInPan, centerStage);
                     break;
-                case 18: 
-                    spriteBatch.Draw(tomatoPaste, corner1, Color.White);
-                    spriteBatch.Draw(mint, corner2, Color.White);
-                    spriteBatch.Draw(salt, corner3, Color.White);
-                    spriteBatch.Draw(hintPressE, centerBowl, Color.White);
+                case 18:
+                    DrawItem(spriteBatch, emptyBowl, centerStage);
+                    DrawItem(spriteBatch, tomatoPaste, corner1);
+                    DrawItem(spriteBatch, mint, corner2);
+                    DrawItem(spriteBatch, salt, corner3);
+                    DrawHint(spriteBatch, hintPressE, hintLocation);
                     break;
-                case 19: 
-                    spriteBatch.Draw(tomatoPaste, centerBowl, Color.White);
-                    spriteBatch.Draw(mint, corner2, Color.White);
-                    spriteBatch.Draw(salt, corner3, Color.White);
-                    spriteBatch.Draw(hintPressE, centerBowl, Color.White);
+                case 19:
+                    DrawItem(spriteBatch, tomatoPaste, centerStage);
+                    DrawItem(spriteBatch, mint, corner2);
+                    DrawItem(spriteBatch, salt, corner3);
+                    DrawHint(spriteBatch, hintPressE, hintLocation);
                     break;
-                case 20: 
-                    spriteBatch.Draw(tomatoPaste, centerBowl, Color.White);
-                    spriteBatch.Draw(mint, centerBowl, Color.White);
-                    spriteBatch.Draw(salt, corner3, Color.White);
-                    spriteBatch.Draw(hintPressE, centerBowl, Color.White);
+                case 20:
+                    DrawItem(spriteBatch, bowl_TomatoPasteMint, centerStage);
+                    DrawItem(spriteBatch, salt, corner3);
+                    DrawHint(spriteBatch, hintPressE, hintLocation);
                     break;
-                case 21: 
-                    spriteBatch.Draw(tomatoPaste, centerBowl, Color.White);
-                    spriteBatch.Draw(mint, centerBowl, Color.White);
-                    spriteBatch.Draw(salt, centerBowl, Color.White);
-                    spriteBatch.Draw(hintSwipeHoriz, centerBowl, Color.White);
+                case 21:
+                    DrawItem(spriteBatch, bowl_TomatoPasteMintSalt, centerStage);
+                    DrawHint(spriteBatch, hintSwipeHoriz, hintLocation);
                     break;
-                case 22: 
-                    spriteBatch.Draw(pizzaSauce, centerBowl, Color.White);
-                    spriteBatch.Draw(popupAmazing, centerBowl, Color.White);
+                case 22:
+                    DrawItem(spriteBatch, pizzaSauce, centerStage);
+                    DrawHint(spriteBatch, hintClick, hintLocation);
                     break;
-                case 23: 
-                    spriteBatch.Draw(doughCut, corner1, Color.White);
-                    spriteBatch.Draw(hintPressE, centerBowl, Color.White); 
+                case 23:
+                    DrawItem(spriteBatch, rolledDough, centerStage);
+                    DrawHint(spriteBatch, hintClick, hintLocation);
                     break;
-                case 24: 
-                    spriteBatch.Draw(doughCut, centerBowl, Color.White); 
-                    spriteBatch.Draw(hintSwipeVert, centerBowl, Color.White);
+                case 24:
+                    DrawItem(spriteBatch, rolledDough, centerStage);
+                    DrawItem(spriteBatch, pizzaSauce, corner1);
+                    DrawItem(spriteBatch, cheese, corner2);
+                    DrawItem(spriteBatch, pepperoni, corner3);
+                    DrawHint(spriteBatch, hintPressE, hintLocation);
                     break;
-                case 25: 
-                    spriteBatch.Draw(pizzapot, centerBowl, Color.White);
-                    spriteBatch.Draw(rolledDough, centerBowl, Color.White);
-                    spriteBatch.Draw(popupGood, centerBowl, Color.White);
+                case 25:
+                    DrawItem(spriteBatch, pizzaWithSauce, centerStage);
+                    DrawItem(spriteBatch, cheese, corner2);
+                    DrawItem(spriteBatch, pepperoni, corner3);
+                    DrawHint(spriteBatch, hintPressE, hintLocation);
                     break;
-                case 26: 
-                    spriteBatch.Draw(pizzapot, centerBowl, Color.White);
-                    spriteBatch.Draw(rolledDough, centerBowl, Color.White); 
-                    spriteBatch.Draw(cheese, corner1, Color.White); 
-                    spriteBatch.Draw(pepperoni, corner2, Color.White);
-                    spriteBatch.Draw(hintSwipeHoriz, centerBowl, Color.White);
+                case 26:
+                    DrawItem(spriteBatch, pizzaWithCheese, centerStage);
+                    DrawItem(spriteBatch, pepperoni, corner3);
+                    DrawHint(spriteBatch, hintPressE, hintLocation);
                     break;
-                case 27: 
-                    spriteBatch.Draw(pizzapot, centerBowl, Color.White);
-                    spriteBatch.Draw(rolledDough, centerBowl, Color.White);
-                    spriteBatch.Draw(sauceSpread, centerBowl, Color.White);
-                    spriteBatch.Draw(cheese, corner1, Color.White); 
-                    spriteBatch.Draw(pepperoni, corner2, Color.White);
-                    spriteBatch.Draw(hintPressE, centerBowl, Color.White);
+                case 27:
+                    DrawItem(spriteBatch, pizzaUncooked, centerStage);
+                    DrawHint(spriteBatch, hintPressE, hintLocation);
                     break;
-                case 28: 
-                    spriteBatch.Draw(pizzapot, centerBowl, Color.White);
-                    spriteBatch.Draw(rolledDough, centerBowl, Color.White);
-                    spriteBatch.Draw(sauceSpread, centerBowl, Color.White);
-                    spriteBatch.Draw(cheese, centerBowl, Color.White); 
-                    spriteBatch.Draw(pepperoni, corner2, Color.White); 
-                    spriteBatch.Draw(hintPressE, centerBowl, Color.White);
+                case 28:
+                    DrawItem(spriteBatch, oven, new Vector2(centerStage.X, centerStage.Y - 150));
+                    DrawTimerBar(spriteBatch, new Vector2(400, 550));
+                    DrawHint(spriteBatch, hintSpacebar, hintLocation);
                     break;
-                case 29: 
-                    spriteBatch.Draw(pizzapot, centerBowl, Color.White);
-                    spriteBatch.Draw(rolledDough, centerBowl, Color.White);
-                    spriteBatch.Draw(sauceSpread, centerBowl, Color.White);
-                    spriteBatch.Draw(cheese, centerBowl, Color.White);
-                    spriteBatch.Draw(pepperoni, centerBowl, Color.White); 
-                    spriteBatch.Draw(popupAmazing, centerBowl, Color.White);
-                    break;
-                case 30: 
-                    spriteBatch.Draw(oven, ovenLocation, Color.White);
-                    spriteBatch.Draw(pizzapot, ovenLocation, Color.White);
-                    spriteBatch.Draw(rolledDough, ovenLocation, Color.White); 
-                    spriteBatch.Draw(sauceSpread, ovenLocation, Color.White);
-                    spriteBatch.Draw(cheese, ovenLocation, Color.White);
-                    spriteBatch.Draw(pepperoni, ovenLocation, Color.White);
-                    
-                    Vector2 barLocation = new Vector2(ovenLocation.X, ovenLocation.Y - 50);
-                    spriteBatch.Draw(uiBarBackground, barLocation, Color.White);
-
-                    float needleX = barLocation.X + ((cookingProgress / 100f) * uiBarBackground.Width);
-                    Vector2 needleLocation = new Vector2(needleX, barLocation.Y - 10); 
-                    spriteBatch.Draw(uiMeterNeedle, needleLocation, Color.White);
-
-                    spriteBatch.Draw(hintSpacebar, centerBowl, Color.White);
-                    break;
-                case 31: 
-                    spriteBatch.Draw(pizzapot, centerBowl, Color.White);
-                    spriteBatch.Draw(pizzaCooked, centerBowl, Color.White);
-                    
-                    if (finalScore == 1)
-                        spriteBatch.Draw(popupAmazing, centerBowl, Color.White);
-                    else
-                        spriteBatch.Draw(popupMiss, centerBowl, Color.White);
+                case 29:
+                    DrawItem(spriteBatch, pizzaCooked, new Vector2(centerStage.X, centerStage.Y - 150));
                     break;
             }
         }
