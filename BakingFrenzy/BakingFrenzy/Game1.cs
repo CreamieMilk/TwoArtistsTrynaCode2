@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Media; // Added for audio
+using Microsoft.Xna.Framework.Media; 
 
 namespace CookingSimulator
 {
@@ -45,7 +45,7 @@ namespace CookingSimulator
         private Texture2D btnPizza, btnCorndog, btnPie;
         private Texture2D popupPerfect, popupGood, popupBad;
         private Texture2D currentPopup, endScreenMamaPortrait;
-        private Song backgroundMusic; // Added music field
+        private Song backgroundMusic; 
 
         private SpriteFont mainFont;
         private int dialogueLine = 0; 
